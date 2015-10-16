@@ -78,7 +78,12 @@
 	  #include "Arduino.h"
 	  #include <Client.h>
 	#else
-      #error Only Arduino Yun, Uno/Mega/Due with either Wired or wi-fi Ethernet shield, and Spark Core/Photon are supported.
+		#ifdef ARDUINO_ARCH_ESP8266
+			#include "Arduino.h"
+			#include <Client.h>
+		#else
+			#error Only Arduino Yun, Uno/Mega/Due with either Wired or wi-fi Ethernet shield, and Spark Core/Photon are supported. Also ESP8266.
+		#endif
 	#endif
 #endif
 
@@ -93,6 +98,11 @@
         #define TS_USER_AGENT "tslib-arduino/1.0 (arduino yun)"
     #endif
 #endif
+
+#ifdef ARDUINO_ARCH_ESP8266
+	#define TS_USER_AGENT "tslib-esp266"
+#endif
+
 #ifdef SPARK
     #define TS_USER_AGENT "tslib-arduino/1.0 (particle core or photon)"
     #define SPARK_PUBLISH_TTL 60 // Spark "time to live" for published messages
